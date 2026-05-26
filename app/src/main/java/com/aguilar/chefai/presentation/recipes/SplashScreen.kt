@@ -7,7 +7,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -19,6 +22,7 @@ import kotlinx.coroutines.delay
 fun SplashScreen(onTimeout: () -> Unit) {
     // Animación de escala para que el texto "tiemble" o crezca suavemente
     val scale = remember { Animatable(0.6f) }
+    var hasNavigated by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = true) {
         scale.animateTo(
@@ -30,7 +34,10 @@ fun SplashScreen(onTimeout: () -> Unit) {
         )
 
         delay(2000) // Duración de la pantalla de bienvenida (2 segundos)
-        onTimeout()
+        if (!hasNavigated) {
+            hasNavigated = true
+            onTimeout()
+        }
     }
 
     Box(

@@ -6,6 +6,9 @@ import com.aguilar.chefai.data.translation.RecipeTranslator
 import com.aguilar.chefai.domain.model.Recipe
 import com.aguilar.chefai.domain.model.RecipeDetail
 import com.aguilar.chefai.domain.repository.RecipeRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 
 class RecipeRepositoryImpl(
     private val api: TheMealDbApi,
@@ -14,25 +17,13 @@ class RecipeRepositoryImpl(
 
     override suspend fun getRecipesByCategory(category: String): List<Recipe> {
         val response = api.getRecipesByCategory(category)
-        return response.meals?.map {
-            Recipe(
-                id = it.idMeal,
-                name = translateToSpanish(it.strMeal),
-                imageUrl = it.strMealThumb
-            )
-        } ?: emptyList()
+        return response.meals?.mapRecipesToSpanish() ?: emptyList()
     }
 
     override suspend fun searchRecipes(query: String): List<Recipe> {
         val englishQuery = translateToEnglish(query)
         val response = api.searchRecipesByName(englishQuery)
-        return response.meals?.map {
-            Recipe(
-                id = it.idMeal,
-                name = translateToSpanish(it.strMeal),
-                imageUrl = it.strMealThumb
-            )
-        } ?: emptyList()
+        return response.meals?.mapRecipesToSpanish() ?: emptyList()
     }
 
     override suspend fun getRecipeDetails(id: String): RecipeDetail {
@@ -53,7 +44,7 @@ class RecipeRepositoryImpl(
             name = translateToSpanish(meal.strMeal),
             instructions = translateToSpanish(meal.strInstructions),
             imageUrl = meal.strMealThumb,
-            ingredients = ingredientsList.map { translateToSpanish(it) }
+            ingredients = ingredientsList.map { translateIngredientToSpanish(it) }
         )
     }
 
@@ -63,5 +54,68 @@ class RecipeRepositoryImpl(
 
     private suspend fun translateToEnglish(text: String): String {
         return runCatching { translator.toEnglish(text) }.getOrElse { text }
+    }
+
+    private suspend fun translateIngredientToSpanish(ingredient: String): String {
+        val normalizedIngredient = ingredient.trim().lowercase()
+        val manualTranslation = ingredientTranslations[normalizedIngredient]
+        return manualTranslation ?: translateToSpanish(ingredient)
+    }
+
+    private suspend fun List<com.aguilar.chefai.data.remote.MealDto>.mapRecipesToSpanish(): List<Recipe> {
+        return coroutineScope {
+            map { meal ->
+                async {
+                    Recipe(
+                        id = meal.idMeal,
+                        name = translateToSpanish(meal.strMeal),
+                        imageUrl = meal.strMealThumb
+                    )
+                }
+            }.awaitAll()
+        }
+    }
+
+    private companion object {
+        val ingredientTranslations = mapOf(
+            "beef" to "Carne de res",
+            "chicken" to "Pollo",
+            "pork" to "Cerdo",
+            "fish" to "Pescado",
+            "salmon" to "Salmón",
+            "egg" to "Huevo",
+            "eggs" to "Huevos",
+            "milk" to "Leche",
+            "butter" to "Mantequilla",
+            "flour" to "Harina",
+            "sugar" to "Azúcar",
+            "salt" to "Sal",
+            "pepper" to "Pimienta",
+            "black pepper" to "Pimienta negra",
+            "olive oil" to "Aceite de oliva",
+            "vegetable oil" to "Aceite vegetal",
+            "water" to "Agua",
+            "garlic" to "Ajo",
+            "onion" to "Cebolla",
+            "tomato" to "Tomate",
+            "tomatoes" to "Tomates",
+            "plum tomatoes" to "Tomates pera",
+            "parsley" to "Perejil",
+            "cilantro" to "Cilantro",
+            "cumin" to "Comino",
+            "paprika" to "Pimentón",
+            "rice" to "Arroz",
+            "potatoes" to "Papas",
+            "potato" to "Papa",
+            "carrot" to "Zanahoria",
+            "carrots" to "Zanahorias",
+            "broccoli" to "Brócoli",
+            "cheese" to "Queso",
+            "bread" to "Pan",
+            "lemon" to "Limón",
+            "lime" to "Lima",
+            "mushrooms" to "Champiñones",
+            "mushroom" to "Champiñón"
+        )
     }
 }

@@ -23,9 +23,6 @@ class MainActivity : ComponentActivity() {
         val getRecipesUseCase = GetRecipesByCategoryUseCase(repository)
         val getRecipeDetailUseCase = GetRecipeDetailUseCase(repository)
 
-        // Le pasamos el caso de uso Y el repositorio al listViewModel para la lupa
-        val listViewModel = RecipeListViewModel(getRecipesUseCase, repository)
-
         setContent {
             val navController = rememberNavController()
 
@@ -44,6 +41,9 @@ class MainActivity : ComponentActivity() {
 
                 // 2. Lista de recetas con Lupa
                 composable("recipe_list") {
+                    val listViewModel = remember {
+                        RecipeListViewModel(getRecipesUseCase, repository)
+                    }
                     RecipeListScreen(
                         viewModel = listViewModel,
                         onRecipeClick = { recipeId ->

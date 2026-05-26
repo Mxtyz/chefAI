@@ -7,6 +7,7 @@ import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.Translator
 import com.google.mlkit.nl.translate.TranslatorOptions
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
@@ -37,8 +38,11 @@ class MlKitRecipeTranslator : RecipeTranslator {
         val cacheKey = "$direction:$cleanText"
         cache[cacheKey]?.let { return it }
 
-        translator.downloadModelIfNeeded(conditions).await()
-        val translated = translator.translate(cleanText).await()
+        val translated = withTimeoutOrNull(60_000) {
+            translator.downloadModelIfNeeded(conditions).await()
+            translator.translate(cleanText).await()
+        } ?: return text
+
         cache[cacheKey] = translated
         return translated
     }

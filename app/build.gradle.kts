@@ -69,7 +69,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
-// 👇 ESTA ES LA SOLUCIÓN AL ERROR DE LA API 36 QUE ESTABA FALTANDO 👇
+
 configurations.all {
     resolutionStrategy {
         force("androidx.core:core:1.13.1")
