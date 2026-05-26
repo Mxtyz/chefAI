@@ -1,4 +1,4 @@
-# ChefAI 👨‍🍳 
+# ChefAI 👨‍🍳  
 
 **ChefAI** es una aplicación móvil nativa para Android diseñada para los amantes de la cocina. Permite a los usuarios explorar una amplia variedad de platos, buscar recetas específicas en tiempo real y visualizar de forma detallada los ingredientes necesarios junto con las instrucciones paso a paso para su preparación.
 
