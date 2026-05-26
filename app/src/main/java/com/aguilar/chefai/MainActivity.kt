@@ -3,15 +3,15 @@ package com.aguilar.chefai
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aguilar.chefai.data.remote.RetrofitClient
-import com.aguilar.chefai.data.repository.RecipeRepositoryImpl
+import com.aguilar.chefai.data.remote.repository.RecipeRepositoryImpl
+import com.aguilar.chefai.domain.usecase.GetRecipeDetailUseCase
 import com.aguilar.chefai.domain.usecase.GetRecipesByCategoryUseCase
-import com.aguilar.chefai.presentation.recipes.RecipeDetailScreen
-import com.aguilar.chefai.presentation.recipes.RecipeListScreen
-import com.aguilar.chefai.presentation.recipes.RecipeListViewModel
+import com.aguilar.chefai.presentation.recipes.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,33 +19,46 @@ class MainActivity : ComponentActivity() {
 
         val api = RetrofitClient.api
         val repository = RecipeRepositoryImpl(api)
-        val useCase = GetRecipesByCategoryUseCase(repository)
-        val viewModel = RecipeListViewModel(useCase)
+
+        val getRecipesUseCase = GetRecipesByCategoryUseCase(repository)
+        val getRecipeDetailUseCase = GetRecipeDetailUseCase(repository)
+
+        // Le pasamos el caso de uso Y el repositorio al listViewModel para la lupa
+        val listViewModel = RecipeListViewModel(getRecipesUseCase, repository)
 
         setContent {
-            // 1. Creamos el controlador de navegación
             val navController = rememberNavController()
 
-            // 2. Definimos las rutas (el mapa)
-            NavHost(navController = navController, startDestination = "recipe_list") {
+            // START DESTINATION AHORA ES SPLASH
+            NavHost(navController = navController, startDestination = "splash") {
 
-                // Pantalla 1: La lista
+                // 1. Pantalla Estética de entrada
+                composable("splash") {
+                    SplashScreen(onTimeout = {
+                        // Navegamos eliminando la pantalla de bienvenida del historial
+                        navController.navigate("recipe_list") {
+                            popUpTo("splash") { inclusive = true }
+                        }
+                    })
+                }
+
+                // 2. Lista de recetas con Lupa
                 composable("recipe_list") {
-                    // Le pasamos una función que le dice qué hacer al hacer clic
                     RecipeListScreen(
-                        viewModel = viewModel,
-                        onRecipeClick = { recipeName ->
-                            // Navegamos a la pantalla 2 pasando el nombre
-                            navController.navigate("recipe_detail/$recipeName")
+                        viewModel = listViewModel,
+                        onRecipeClick = { recipeId ->
+                            navController.navigate("recipe_detail/$recipeId")
                         }
                     )
                 }
 
-                // Pantalla 2: Los detalles
-                composable("recipe_detail/{recipeName}") { backStackEntry ->
-                    // Recuperamos el nombre que mandamos por la ruta
-                    val recipeName = backStackEntry.arguments?.getString("recipeName") ?: "Receta Desconocida"
-                    RecipeDetailScreen(recipeName = recipeName)
+                // 3. Detalles (Ingredientes y pasos)
+                composable("recipe_detail/{recipeId}") { backStackEntry ->
+                    val recipeId = backStackEntry.arguments?.getString("recipeId") ?: ""
+                    val detailViewModel = remember(recipeId) {
+                        RecipeDetailViewModel(getRecipeDetailUseCase, recipeId)
+                    }
+                    RecipeDetailScreen(viewModel = detailViewModel)
                 }
             }
         }

@@ -54,6 +54,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+    implementation("com.google.mlkit:translate:17.0.3")
 
     // Librerías de Jetpack Compose (Para que funcione el diseño de la app)
     val composeBom = platform("androidx.compose:compose-bom:2024.02.00")

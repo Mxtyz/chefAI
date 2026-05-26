@@ -1,11 +1,10 @@
 package com.aguilar.chefai.domain.repository
 
 import com.aguilar.chefai.domain.model.Recipe
+import com.aguilar.chefai.domain.model.RecipeDetail
 
-/**
- * Interfaz del repositorio (Abstracción).
- * Define el contrato de qué datos necesitamos, sin importar de dónde vienen.
- */
 interface RecipeRepository {
     suspend fun getRecipesByCategory(category: String): List<Recipe>
+    suspend fun searchRecipes(query: String): List<Recipe> // Para la lupa
+    suspend fun getRecipeDetails(id: String): RecipeDetail // Para los detalles
 }
