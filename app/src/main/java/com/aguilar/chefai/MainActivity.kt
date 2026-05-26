@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aguilar.chefai.data.remote.RetrofitClient
-import com.aguilar.chefai.data.remote.repository.RecipeRepositoryImpl
+import com.aguilar.chefai.data.repository.RecipeRepositoryImpl
 import com.aguilar.chefai.domain.usecase.GetRecipesByCategoryUseCase
 import com.aguilar.chefai.presentation.recipes.RecipeDetailScreen
 import com.aguilar.chefai.presentation.recipes.RecipeListScreen
