@@ -1,4 +1,4 @@
-package com.aguilar.chefai.presentation.recipes
+package com.aguilar.chefai.presentation.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background

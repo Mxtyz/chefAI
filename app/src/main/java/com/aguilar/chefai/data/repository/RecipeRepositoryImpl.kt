@@ -1,11 +1,12 @@
-package com.aguilar.chefai.data.remote.repository
+package com.aguilar.chefai.data.repository
 
-import com.aguilar.chefai.data.remote.TheMealDbApi
-import com.aguilar.chefai.data.translation.MlKitRecipeTranslator
-import com.aguilar.chefai.data.translation.RecipeTranslator
+import com.aguilar.chefai.data.remote.api.TheMealDbApi
+import com.aguilar.chefai.data.remote.dto.MealDto
 import com.aguilar.chefai.domain.model.Recipe
 import com.aguilar.chefai.domain.model.RecipeDetail
 import com.aguilar.chefai.domain.repository.RecipeRepository
+import com.aguilar.chefai.utils.MlKitRecipeTranslator
+import com.aguilar.chefai.utils.RecipeTranslator
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -62,7 +63,7 @@ class RecipeRepositoryImpl(
         return manualTranslation ?: translateToSpanish(ingredient)
     }
 
-    private suspend fun List<com.aguilar.chefai.data.remote.MealDto>.mapRecipesToSpanish(): List<Recipe> {
+    private suspend fun List<MealDto>.mapRecipesToSpanish(): List<Recipe> {
         return coroutineScope {
             map { meal ->
                 async {

@@ -1,4 +1,4 @@
-package com.aguilar.chefai.presentation.recipes
+package com.aguilar.chefai.presentation.viewmodel
 
 import com.aguilar.chefai.domain.model.RecipeDetail
 

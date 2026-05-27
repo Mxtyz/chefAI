@@ -1,4 +1,4 @@
-package com.aguilar.chefai.data.translation
+package com.aguilar.chefai.utils
 
 interface RecipeTranslator {
     suspend fun toSpanish(text: String): String

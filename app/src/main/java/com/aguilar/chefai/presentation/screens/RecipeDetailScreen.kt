@@ -1,4 +1,4 @@
-package com.aguilar.chefai.presentation.recipes
+package com.aguilar.chefai.presentation.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.aguilar.chefai.presentation.viewmodel.RecipeDetailViewModel
 
 @Composable
 fun RecipeDetailScreen(viewModel: RecipeDetailViewModel) {

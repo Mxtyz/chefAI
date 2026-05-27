@@ -1,5 +1,6 @@
-package com.aguilar.chefai.data.remote
+package com.aguilar.chefai.data.remote.api
 
+import com.aguilar.chefai.data.remote.dto.RecipeResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

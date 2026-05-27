@@ -1,4 +1,4 @@
-package com.aguilar.chefai.presentation.recipes
+package com.aguilar.chefai.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

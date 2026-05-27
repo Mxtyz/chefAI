@@ -1,4 +1,4 @@
-package com.aguilar.chefai.presentation.recipes
+package com.aguilar.chefai.presentation.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.aguilar.chefai.domain.model.Recipe
+import com.aguilar.chefai.presentation.viewmodel.RecipeListViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

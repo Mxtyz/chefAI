@@ -1,4 +1,4 @@
-package com.aguilar.chefai.data.remote
+package com.aguilar.chefai.data.remote.api
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

@@ -1,4 +1,4 @@
-package com.aguilar.chefai.data.remote
+package com.aguilar.chefai.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 

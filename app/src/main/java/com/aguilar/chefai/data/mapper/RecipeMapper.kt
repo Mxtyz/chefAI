@@ -1,6 +1,6 @@
-package com.aguilar.chefai.data.repository
+package com.aguilar.chefai.data.mapper
 
-import com.aguilar.chefai.data.remote.RecipeDto
+import com.aguilar.chefai.data.remote.dto.RecipeDto
 import com.aguilar.chefai.domain.model.Recipe
 
 fun RecipeDto.toDomain(): Recipe {

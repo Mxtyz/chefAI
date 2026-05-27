@@ -7,11 +7,15 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.aguilar.chefai.data.remote.RetrofitClient
-import com.aguilar.chefai.data.remote.repository.RecipeRepositoryImpl
+import com.aguilar.chefai.data.remote.api.RetrofitClient
+import com.aguilar.chefai.data.repository.RecipeRepositoryImpl
 import com.aguilar.chefai.domain.usecase.GetRecipeDetailUseCase
 import com.aguilar.chefai.domain.usecase.GetRecipesByCategoryUseCase
-import com.aguilar.chefai.presentation.recipes.*
+import com.aguilar.chefai.presentation.screens.RecipeDetailScreen
+import com.aguilar.chefai.presentation.screens.RecipeListScreen
+import com.aguilar.chefai.presentation.screens.SplashScreen
+import com.aguilar.chefai.presentation.viewmodel.RecipeDetailViewModel
+import com.aguilar.chefai.presentation.viewmodel.RecipeListViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
